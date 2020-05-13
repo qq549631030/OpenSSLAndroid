@@ -1,0 +1,3 @@
+rootProject.name='OpenSSLAndroid'
+include ':app'
+include ':library'
