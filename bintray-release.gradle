@@ -43,3 +43,39 @@ afterEvaluate {
         options.addStringOption('encoding', 'UTF-8')
     }
 }
+// load properties
+Properties properties = new Properties()
+File localPropertiesFile = project.file("$rootProject.projectDir.absolutePath/local.properties");
+if (localPropertiesFile.exists()) {
+    properties.load(localPropertiesFile.newDataInputStream())
+}
+File projectPropertiesFile = project.file("project.properties");
+if (projectPropertiesFile.exists()) {
+    properties.load(projectPropertiesFile.newDataInputStream())
+}
+
+// read properties
+def projectName = properties.getProperty("project.name")
+def projectGroupId = properties.getProperty("project.groupId")
+def projectArtifactId = properties.getProperty("project.artifactId")
+def projectVersionName = android.defaultConfig.versionName
+def projectSiteUrl = properties.getProperty("project.siteUrl")
+def projectGitUrl = properties.getProperty("project.gitUrl")
+def projectDesc = properties.getProperty("project.desc")
+
+def bintrayUserName = properties.getProperty("bintray.user")
+def bintrayApikey = properties.getProperty("bintray.apikey")
+
+project.publish {
+    groupId = projectGroupId
+    artifactId = projectArtifactId
+    uploadName = projectName
+    website = projectSiteUrl
+    repository = projectGitUrl
+    desc = projectDesc
+    publishVersion = projectVersionName
+    userOrg = bintrayUserName
+    bintrayUser = bintrayUserName
+    bintrayKey = bintrayApikey
+    dryRun = true
+}
